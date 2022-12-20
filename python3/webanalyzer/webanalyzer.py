@@ -280,6 +280,7 @@ class WebAnalyzer(object):
         if self._cond_parser.parse(rule['condition'], cond_map):
             return result
 
+    # 指纹识别
     def start(self, url: str, reload: bool = True):
         logger.debug("process %s" % url)
         self.url = url
@@ -287,18 +288,22 @@ class WebAnalyzer(object):
         implies = set()
         excludes = set()
 
+        # 请求url
         if not self._request(url):
             logger.info("request %s failed" % url)
             return
 
+        # 请求url+/favicon.ico
         self._request(urllib.parse.urljoin(url, '/favicon.ico'))
+
+        # req结果,填充resp,写入self._targets[url]
 
         if reload:
             self.reload_rules()
 
         for name, rule in RULES.items():
             # print(name)
-            r = self._check_rule(rule)
+            r = self._check_rule(rule)  # 指纹识别
             if r:
                 if 'implies' in rule:
                     if isinstance(rule['implies'], str):
@@ -354,7 +359,7 @@ def check(url, update):
 
     w.allow_redirect = True
 
-    r = w.start(url)
+    r = w.start(url) # 指纹识别
     # if r:
     #     click.echo(json.dumps(r, indent=4))
     banner = []

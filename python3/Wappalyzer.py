@@ -224,7 +224,7 @@ class Wappalyzer:
             from `AliasIO/wappalyzer <https://github.com/AliasIO/wappalyzer>`_ repository.  
         
         """
-        default=pkg_resources.resource_string(__name__, "technologies.json")
+        default=pkg_resources.resource_string(__name__, "technologies.json") # 调用文件
         defaultobj = json.loads(default)
 
         if technologies_file:
@@ -556,6 +556,7 @@ class Wappalyzer:
         """
         return None if 'confidenceTotal' not in self.technologies[app_name] else self.technologies[app_name]['confidenceTotal']
 
+    # 指纹识别
     def analyze(self, webpage:WebPage) -> Set[str]:
         """
         Return a set of technology that can be detected on the web page.
